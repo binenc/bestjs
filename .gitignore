@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+*.tsbuildinfo
+
+# Env — never commit real secrets. Commit .env.example, ignore the rest.
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+
+# Bun
+.bun/
+
+# OS
+.DS_Store
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea/

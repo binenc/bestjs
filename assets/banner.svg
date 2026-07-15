@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 340" role="img" aria-label="bestjs — secure by default, leak-free by construction, fail-fast">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0c1020"/>
+      <stop offset="0.55" stop-color="#0a0e1a"/>
+      <stop offset="1" stop-color="#070a12"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f472b6"/>
+      <stop offset="0.5" stop-color="#fb7185"/>
+      <stop offset="1" stop-color="#fb923c"/>
+    </linearGradient>
+    <linearGradient id="ink" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4f7ff"/>
+      <stop offset="1" stop-color="#c7d0e6"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.2" cy="0.1" r="0.9">
+      <stop offset="0" stop-color="#f472b6" stop-opacity="0.22"/>
+      <stop offset="0.4" stop-color="#7c3aed" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="0.9" cy="0.9" r="0.8">
+      <stop offset="0" stop-color="#22d3ee" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="34" height="34" patternUnits="userSpaceOnUse">
+      <path d="M 34 0 L 0 0 0 34" fill="none" stroke="#8aa0c6" stroke-opacity="0.05" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1280" height="340" rx="20" fill="url(#bg)"/>
+  <rect width="1280" height="340" rx="20" fill="url(#grid)"/>
+  <rect width="1280" height="340" rx="20" fill="url(#glow)"/>
+  <rect width="1280" height="340" rx="20" fill="url(#glow2)"/>
+  <rect x="1" y="1" width="1278" height="338" rx="19" fill="none" stroke="#2a3350" stroke-opacity="0.6" stroke-width="1.5"/>
+
+  <!-- corner bracket motif: "bounded by construction" -->
+  <g stroke="url(#accent)" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.85">
+    <path d="M 56 92 L 56 60 L 88 60"/>
+    <path d="M 1224 248 L 1224 280 L 1192 280"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="640" y="188" text-anchor="middle"
+        font-family="'Inter','Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif"
+        font-size="132" font-weight="800" letter-spacing="-4">
+    <tspan fill="url(#ink)">best</tspan><tspan fill="url(#accent)">js</tspan>
+  </text>
+
+  <!-- accent underline -->
+  <rect x="486" y="212" width="308" height="5" rx="2.5" fill="url(#accent)"/>
+
+  <!-- tagline -->
+  <text x="640" y="256" text-anchor="middle"
+        font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace"
+        font-size="21" letter-spacing="1.5" fill="#9fb0d0">
+    secure by default <tspan fill="#f472b6">·</tspan> leak-free by construction <tspan fill="#fb923c">·</tspan> fail-fast
+  </text>
+
+  <!-- subtitle: the marriage -->
+  <text x="640" y="296" text-anchor="middle"
+        font-family="ui-monospace,'SF Mono',Menlo,Consolas,monospace"
+        font-size="16" letter-spacing="3" fill="#5f6f92">
+    BUN &#215; NESTJS &#215; THE MINDSET OF RUST
+  </text>
+</svg>

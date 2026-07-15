@@ -1,0 +1,26 @@
+# bestjs — Bun runtime configuration
+# Reproducible-build ethos: pin, freeze, and vet. No hidden magic at install time.
+
+[install]
+# CI and production installs MUST be reproducible. `bun install --frozen-lockfile`
+# fails if bun.lock would change — the lockfile is the single source of truth.
+exact = true            # write exact versions to the lockfile, never ranges
+peer = true             # resolve peer dependencies deterministically
+production = false       # dev installs include devDependencies; prod uses --production
+
+# Supply-chain posture (no unverified scanner package referenced here on purpose):
+#  - `trustedDependencies` in package.json is the allow-list for lifecycle scripts;
+#    Bun refuses to run postinstall from anything not listed. Keep it minimal & audited.
+#  - `bun audit --audit-level=high` runs in the `check` gate and in CI.
+#  - `bun pm untrusted` shows which installed packages WANTED to run scripts.
+# To add a real scanner later: `bun add -d <published-scanner>` then set
+# `[install.security] scanner = "<name>"` — only reference a package that exists.
+
+[test]
+# Deterministic test runs: no wall-clock/network flakiness sneaking in silently.
+coverage = true
+coverageThreshold = 0.0   # raise this as the suite grows; start honest.
+
+[run]
+# Fail loudly on unhandled rejections instead of limping along in a bad state.
+bun = true

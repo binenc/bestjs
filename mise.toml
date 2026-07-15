@@ -1,0 +1,24 @@
+# bestjs toolchain — pinned for reproducibility (Rust-mindset: no version drift).
+# `mise install` provisions exactly this Bun; `mise exec -- bun ...` runs it.
+[tools]
+bun = "1.3.14"
+
+[env]
+# Load the local .env for tasks run through mise.
+_.file = ".env"
+
+[tasks.dev]
+description = "Run the server in watch mode"
+run = "bun --watch src/main.ts"
+
+[tasks.typecheck]
+description = "Strict type-check without emit"
+run = "tsc --noEmit"
+
+[tasks.test]
+description = "Run the Bun test suite"
+run = "bun test"
+
+[tasks.check]
+description = "Full gate: types + tests + audit"
+run = "bun run typecheck && bun test && bun audit --audit-level=high"
