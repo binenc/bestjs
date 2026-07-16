@@ -29,6 +29,8 @@
   "scripts": {
     "dev": "bun --watch src/main.ts",
     "start": "NODE_ENV=production bun src/main.ts",
+    "turbo": "NODE_ENV=production bun src/turbo.ts",
+    "turbo:cluster": "NODE_ENV=production bun src/turbo-cluster.ts",
     "build": "bun build src/main.ts --target=bun --outdir=dist --minify",
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"src/**/*.ts\"",

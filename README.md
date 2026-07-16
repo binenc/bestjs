@@ -155,6 +155,39 @@ flowchart LR
 
 ---
 
+## ⚡ Performance & the `turbo` tier
+
+bestjs ships **two runtimes that share one security core**:
+
+- **`src/main.ts`** — the full **NestJS** app (DI, modules, guards, OpenAPI-ready). Structure first.
+- **`src/turbo.ts`** — the *same* guarantees served **directly on `Bun.serve`**, with no Express/DI per-request tax. Elysia-class speed.
+
+Both reuse the **identical** pure primitives (`canonicalizePath`, `foldMethod`, `TokenBucket`, `AppError`), so "fast" never means "less safe" — `turbo` passes the exact same auth-bypass matrix (`/%61dmin` → 401, double-encoding → 400, HEAD → 401).
+
+**Benchmark** — Apple M5 Pro, Bun 1.3.14, single process, hello-JSON, 100 conns × 10s, 0 errors:
+
+| Runtime | req/s | p50 | p99 | |
+|:--------|------:|----:|----:|:--|
+| raw `Bun.serve` | ~74k | 1ms | 2ms | the ceiling |
+| Elysia | ~75k | 1ms | 2ms | Bun-native |
+| **bestjs `turbo`** | **~75k** | **1ms** | **2ms** | **= Elysia, full security** |
+| bare Express (Bun) | ~61k | 1ms | 3ms | |
+| **bestjs NestJS** | **~37k** | **2ms** | **4ms** | the structure tax |
+
+> [!NOTE]
+> Everything at ~75k was **client-capped** (the load generator saturated at ~75k on the same box), so raw-bun / Elysia / `turbo` are tied *at least* there. The NestJS 37k is genuinely server-bound — the gap is Express + DI + the middleware chain, **not** Bun and **not** the security checks.
+
+**Scale past one core — `SO_REUSEPORT` clustering (no proxy, no shared state):**
+
+```bash
+bun run turbo            # single fast path
+bun run turbo:cluster    # N workers, kernel load-balanced (TURBO_WORKERS=cpucount)
+```
+
+**What about Rust?** We measured it, we didn't guess. A Rust `cdylib` canonicalizer called via `bun:ffi` beat the TypeScript one by only **1.07×** — FFI marshalling ate the native gain, and canonicalization already runs at **3.8M ops/s** (~0.02% of the request budget). **Rust is the wrong tool for tiny per-request work**; it pays off only for CPU-heavy batch operations where marshalling amortizes. The real win was architectural (drop Express); the real scaling lever is `reusePort`.
+
+**Rule of thumb:** `turbo` for latency-critical hot paths · NestJS for the structured business surface · run both.
+
 ## 🎯 Threats → defenses
 
 > [!NOTE]
@@ -193,7 +226,9 @@ flowchart LR
 
 ```
 src/
-├─ main.ts                     # gated bootstrap + graceful shutdown
+├─ main.ts                     # NestJS: gated bootstrap + graceful shutdown
+├─ turbo.ts                    # Bun.serve fast path — same security, ~2× req/s
+├─ turbo-cluster.ts            # SO_REUSEPORT launcher (scale past one core)
 ├─ app.module.ts               # global filter + guard + interceptor
 ├─ core/
 │  ├─ config/                  # zod fail-fast config (panic on bad env)
